@@ -1,0 +1,35 @@
+vs2008,vs2010插件
+
+功能：格式化变量定义块
+
+例如：
+将以下变量定义
+
+    k                       = 8;
+     vector<map<int>>vecMap;
+    vector<map<int>> vecMap;
+    vector<map<int> >          vecMap;
+    vector<map<int> > vecMap;
+char*p;
+char * p;
+char* p ;
+char *p ;
+char*  p =null;
+
+格式化为：
+
+    k                           = 8;
+    vector<map<int>>    vecMap;
+    vector<map<int>>    vecMap;
+    vector<map<int> >   vecMap;
+    vector<map<int> >   vecMap;
+    char                *p;
+    char                *p;
+    char                *p;
+    char                *p;
+    char                *p      = null;
+
+使用方法：
+将文件放到 C:\Users\用户名\Documents\Visual Studio 2008\Addins 目录下。
+打开vs2008就可以在tool菜单项看到菜单项：Foramt variable Define，同时在代码编辑区的右键菜单中也有同样的菜单。
+如果你是用的VS2010，将FormatVariableDefine.AddIn文件中的两处 <Version>9.0 改为 <Version>10.0
