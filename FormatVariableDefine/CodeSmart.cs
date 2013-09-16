@@ -45,16 +45,20 @@ namespace FormatVariableDefine
                 if (part1.Length > nMaxLenPart1)
                     nMaxLenPart1 = part1.Length;
 
-                if (part2.Length > nMaxLenPart2)
-                    nMaxLenPart2 = part2.Length;
+                if (part1.Length + part2.Length > nMaxLenPart2)
+                    nMaxLenPart2 = part1.Length + part2.Length;
 
                 lstString.Add(part1);
                 lstString.Add(part2);
                 lstString.Add(part3);
             }
-            nMaxLenPart1 += 4;
+            if (0 != nMaxLenPart1)
+            {
+                nMaxLenPart1 += 4;
+                nMaxLenPart1 -= nMaxLenPart1 % 4;
+            }
+            nMaxLenPart2 -= nMaxLenPart1;
             nMaxLenPart2 += 4;
-            nMaxLenPart1 -= nMaxLenPart1 % 4;
             nMaxLenPart2 -= nMaxLenPart2 % 4;
             int nPreSpaceLen = 0;
             int nFrequency = 0;
@@ -73,17 +77,19 @@ namespace FormatVariableDefine
             for (int i = 0; i < nRow; i++)
             {
                 string part1 = lstString[j++];
-                for (int n = part1.Length; n < nMaxLenPart1; n++)
+                for (int n = part1.Length; n != 0 && n < nMaxLenPart1; n++)
                     part1 += ' ';
 
                 string part2 = lstString[j++];
-                for (int n = part2.Length; n < nMaxLenPart2; n++)
-                    part2 += ' ';
 
-                if (0 == part1.Trim().Length)
+                if (0 == part1.Length)
                 {
-                    part1 = "";
-                    for (int n = 0; n < nMaxLenPart1; n++)
+                    for (int n = part2.Length; n < nMaxLenPart1 + nMaxLenPart2; n++)
+                        part2 += ' ';
+                } 
+                else
+                {
+                    for (int n = part2.Length; n < nMaxLenPart2; n++)
                         part2 += ' ';
                 }
 
