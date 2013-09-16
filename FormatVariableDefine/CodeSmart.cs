@@ -80,6 +80,13 @@ namespace FormatVariableDefine
                 for (int n = part2.Length; n < nMaxLenPart2; n++)
                     part2 += ' ';
 
+                if (0 == part1.Trim().Length)
+                {
+                    part1 = "";
+                    for (int n = 0; n < nMaxLenPart1; n++)
+                        part2 += ' ';
+                }
+
                 string part3 = lstString[j++];
 
                 string outstr = String.Concat(strPreSpace, part1, part2, part3);
@@ -150,7 +157,9 @@ namespace FormatVariableDefine
             int nPostTemplete   = line.LastIndexOf('>');
             int nPosSpace       = line.LastIndexOf(' ');
             nPos = nPosPoint > nPostTemplete ? nPosPoint : nPostTemplete;
-            nPos = nPos > nPosSpace ? nPos : nPosSpace;
+            
+            if (-1 == nPos || '*' != line[nPos])
+                nPos = nPos > nPosSpace ? nPos : nPosSpace;
 
             if (-1 == nPos)
             {
@@ -159,9 +168,33 @@ namespace FormatVariableDefine
             }
             else
             {
-                part1 = line.Substring(0, nPos+1);
-                part1 = part1.Trim();
-                part2 = line.Substring(nPos + 1);
+                if ('*' == line[nPos])
+                {
+                    int nStarNum = 0;
+                    while (nPos >= 0 && '*' == line[nPos])
+                    {
+                        nPos--;
+                        nStarNum++;
+                    }
+                    nPos++;
+                    part1 = line.Substring(0, nPos);
+                    part1 = part1.Trim();
+                    part2 = line.Substring(nPos + nStarNum);
+                    part2 = part2.Trim();
+                    string strTmp = "";
+                    for (; nStarNum > 0; nStarNum-- )
+                    {
+                        strTmp += '*';
+                    }
+                    part2 = strTmp + part2;
+                }
+                else
+                {
+                    part1 = line.Substring(0, nPos + 1);
+                    part1 = part1.Trim();
+                    part2 = line.Substring(nPos + 1);
+                    part2 = part2.Trim();
+                }
             }
 
             if (bHaveSemicolon)
