@@ -26,6 +26,7 @@ namespace FormatVariableDefine
             Dictionary<int, int> dctPreSpace = new Dictionary<int, int>();
             int nMaxLenPart1 = 0;
             int nMaxLenPart2 = 0;
+            int nMaxLenOnlyHavePart2 = 0;
             int nRow = 0;
             foreach (string line in stringLines)
             {
@@ -34,7 +35,7 @@ namespace FormatVariableDefine
                 string part2 = "";
                 string part3 = "";
                 int nPreSpace = Split3Part(line, ref part1, ref part2, ref part3);
-                if (0 != nPreSpace)
+                //if (0 != nPreSpace)
                 {
                     if (dctPreSpace.ContainsKey(nPreSpace))
                         dctPreSpace[nPreSpace]++;
@@ -45,29 +46,41 @@ namespace FormatVariableDefine
                 if (part1.Length > nMaxLenPart1)
                     nMaxLenPart1 = part1.Length;
 
-                if (part1.Length + part2.Length > nMaxLenPart2)
-                    nMaxLenPart2 = part1.Length + part2.Length;
+                if (part1.Length > 0 && part2.Length > nMaxLenPart2)
+                    nMaxLenPart2 = part2.Length;
+                else if (part1.Length == 0 && part2.Length > nMaxLenOnlyHavePart2)
+                    nMaxLenOnlyHavePart2 = part2.Length;
+
+                //if (part1.Length + part2.Length > nMaxLenPart2)
+                //    nMaxLenPart2 = part1.Length + part2.Length;
 
                 lstString.Add(part1);
                 lstString.Add(part2);
                 lstString.Add(part3);
             }
+
             if (0 != nMaxLenPart1)
             {
                 nMaxLenPart1 += 4;
                 nMaxLenPart1 -= nMaxLenPart1 % 4;
             }
-            nMaxLenPart2 -= nMaxLenPart1;
             nMaxLenPart2 += 4;
             nMaxLenPart2 -= nMaxLenPart2 % 4;
+            nMaxLenOnlyHavePart2 += 4;
+            nMaxLenOnlyHavePart2 -= nMaxLenOnlyHavePart2 % 4;
+            if (nMaxLenOnlyHavePart2 > nMaxLenPart1 + nMaxLenPart2)
+            {
+                nMaxLenPart2 = nMaxLenOnlyHavePart2 - nMaxLenPart1;
+            }
+
             int nPreSpaceLen = 0;
-            int nFrequency = 0;
+            int nAppearCount = 0;
             foreach (KeyValuePair<int, int> item in dctPreSpace)
             {
-                if (item.Value > nFrequency)
+                if (item.Value > nAppearCount)
                 {
                     nPreSpaceLen = item.Key;
-                    nFrequency = item.Value;
+                    nAppearCount = item.Value;
                 }
             }
             string strPreSpace = "";
@@ -215,3 +228,16 @@ namespace FormatVariableDefine
         }
     }
 }
+/*
+    vector<map<int>>vecMap;
+   vector<map<int>>vecMap;
+   vector<map<int> >         vecMap;
+   vector<map<int> >vecMap;
+char*p;
+char *p;
+char*p ;
+char *p ;
+   char* p =null;
+   doubled=1.0;
+    unsignedintnCount=0;
+*/
